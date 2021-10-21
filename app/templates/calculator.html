@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src=/static/js/calc.js></script>
+
+  </head>
+
+  <body>
+    <h1>Welcome to the Secure Calculator</h1>
+    <h2>Protected by username and password</h2>
+    <form action="/calculate" method="post">
+      <label for="">Number 1</label>
+      <input type="text" name="Number_1" value="">
+      <br>
+      <label for="">Number 2</label>
+      <input type="text" name="Number_2" value="">
+      <br>
+
+      <select class="form-control" name="Operation" id="Operation">
+        <option value="+">+</option>
+        <option value="-">-</option>
+        <option value="*">*</option>
+        <option value="/">/</option>
+      </select>
+
+      <br>
+
+      <input type="submit" value="submit">
+    </form>
+
+    <h2>A Secure Calculator Using javascript methods </h2>
+
+    <form id='calcForm'>
+      <label for="">Number 1</label>
+      <input type="text" name="Number_1">
+      <br>
+
+      <select class="form-control" name="Operation" id="Operation">
+        <option value="+">+</option>
+        <option value="-">-</option>
+        <option value="*">*</option>
+        <option value="/">/</option>
+      </select>
+
+      <br>
+
+      <label for="">Number 2</label>
+      <input type="text" name="Number_2">
+      <br>
+
+      <label for="">=</label>
+      <label id="resultInput"></label>
+
+      <input type="submit" value="submit">
+    </form>
+
+    <form action="/logout">
+    <button type="submit">Logout</button>
+    </form>
+
+
+  </body>
+</html>
