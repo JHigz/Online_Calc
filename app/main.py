@@ -57,11 +57,12 @@ def index_page():
         isUserLoggedIn = verify_token(request.cookies['token'])
 
     if isUserLoggedIn:
-        return "Welcome back to the website"
+        resp = make_response(render_template('index.html'))
+        return resp 
     else:
         user_id = random()
         print(f"User ID: {user_id}")
-        resp = make_response(render_template('index.html'))
+        resp = make_response(render_template('main.html'))
         resp.set_cookie('user_id', str(user_id))
         return resp
 

@@ -2,21 +2,25 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title> Main Page</title>
+    <title> Logged In User </title>
     <script type="text/javascript" src="/static/js/main.js">
     //alert('This is a message from the script in the head section')
 
     </script>
   </head>
   <body>
-    <h1> Welcome to the Secure Rest Calculator</h1>
-    <a href="/login">Click here to login</a>
+    <h1> Welcome back to the site</h1>
 
+    <form action="/calculator">
+    <button type="submit">Go to Calculator</button>
+    </form>
 
-    <p id="paragraph_field"> This is the inital Paragraph </p>
-    <button type="button" name="btnChangeParagraph" onclick="updateParagraph()">Click to Change the Paragraph</button>
+    <br>
+    <br>
 
-    <p id="paragraph_field2"> This is the 2nd Paragraph on this page </p>
-    <button type="button" name="btnChangeParagraph2" onclick="updateParagraph2()">Click to Change the Paragraph 2</button>
+    <form action="/logout">
+    <button type="submit">Logout</button>
+    </form>
+
   </body>
 </html>
