@@ -58,7 +58,7 @@ def index_page():
 
     if isUserLoggedIn:
         resp = make_response(render_template('index.html'))
-        return resp 
+        return resp
     else:
         user_id = random()
         print(f"User ID: {user_id}")
@@ -85,7 +85,12 @@ def logout_page():
 
 @flaskapp.route('/authenticate', methods = ['POST'])
 def authenticate_users():
-    '''
+    data = request.form
+    username = data['username']
+    password = data['password']
+     # check whether the username and password are correct
+    db_token = create_token(username, password)
+
     try:
         with closing(sqlite3.connect("users.db")) as connection:
             with closing(connection.cursor()) as cursor:
@@ -93,19 +98,7 @@ def authenticate_users():
                 connection.commit()
     except:
         pass
-    '''
-    data = request.form
-    username = data['username']
-    password = data['password']
 
-     # check whether the username and password are correct
-    db_token = create_token(username, password)
-
-    resp = make_response(redirect('/calculator'))
-    #resp.set_cookie("loggedIn", "True")
-    resp.set_cookie('token', db_token)
-    return resp
-'''
     with closing(sqlite3.connect("users.db")) as connection:
         with closing(connection.cursor()) as cursor:
             cursor.execute("SELECT * FROM user_info WHERE username=? and password=?", (username, password,))
@@ -113,15 +106,19 @@ def authenticate_users():
         if udat == None:
             newuser(username,password)
             db_token = create_token(username, password)
-            resp = make_response(render_template('loginredirect.html'))
-            resp.set_cookie('token', db_token)
-            return resp
-        else:
-            db_token = create_token(username,password)
             resp = make_response(render_template('calculator.html'))
             resp.set_cookie('token', db_token)
             return resp
-'''
+        else:
+            db_token = create_token(username, password)
+            resp = make_response(render_template('calculator.html'))
+            resp.set_cookie('token', db_token)
+            return resp
+
+    resp = make_response(redirect('/calculator'))
+    #resp.set_cookie("loggedIn", "True")
+    resp.set_cookie('token', db_token)
+    return resp
 
 @flaskapp.route('/calculator', methods = ['GET'])
 def calculator_get():
