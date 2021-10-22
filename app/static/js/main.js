@@ -4,5 +4,5 @@ function updateParagraph(){
 }
 function updateParagraph2(){
   alert('This is the update paragraph section 2 from the file')
-  document.getElementById("paragraph_field").innerHTML = "This the 2nd updated paragraph from the file"
+  document.getElementById("paragraph_field2").innerHTML = "This the 2nd updated paragraph from the file"
 }
