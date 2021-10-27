@@ -1,5 +1,5 @@
-# @component CalcApp:VPC:SecurityGroup (#sg)
-
+# @component CalcApp:AWS_VPC:SecurityGroup (#sg)
+# @connects #vpc to #sg with Network
 resource "aws_security_group" "cyber94_jhiguita_calculator_2_webserver_sg_tf" {
   name = "cyber94_jhiguita_calculator_2_webserver_sg"
 
@@ -40,8 +40,13 @@ resource "aws_security_group" "cyber94_jhiguita_calculator_2_webserver_sg_tf" {
   }
 }
 
-# @component CalcApp:VPC:WebServer (#subnet)
-# @connects #vpc to #subnet with Network
+# @component CalcApp:AWS_VPC:SecurityGroup:Subnet:AppServer (#app)
+# @connects #subnet to #app with Network
+# @component CalcApp:AWS_VPC:SecurityGroup:Subnet:DBServer (#db)
+# @connects #subnet to #db with Network
+# @component CalcApp:AWS_VPC:SecurityGroup:Subnet:AppServer:CalculatorApp (#calc)
+# @connects #app to #calc with Network
+
 resource "aws_instance" "cyber94_jhiguita_calculator_2_webserver_tf" {
     ami = var.var_aws_ami_ubuntu_1804
     instance_type = "t2.micro"

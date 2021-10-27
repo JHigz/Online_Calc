@@ -1,5 +1,5 @@
-
-# @component CalcApp:VPC:Subnet (#subnet)
+# @component CalcApp:AWS_VPC:SecurityGroup:Subnet (#subnet)
+# @connects #sg to #subnet with network
 resource "aws_subnet" "cyber94_jhiguita_calculator_2_subnet_web_tf" {
   vpc_id = var.var_aws_vpc_id
   cidr_block = "10.7.1.0/24"

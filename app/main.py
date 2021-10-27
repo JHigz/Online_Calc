@@ -50,6 +50,8 @@ def verify_token(token):
 
 # @component CalcApp:Web:Server:Index (#index)
 # @connects #guest to #index with HTTP-GET
+# @threat Cross-Site-Scripting (XSS)(#xss)
+# @exposes #index to #xss with NOT sanitizing user inputs
 @flaskapp.route('/')
 def index_page():
     print(request.cookies)
@@ -68,9 +70,13 @@ def index_page():
         resp.set_cookie('user_id', str(user_id))
         return resp
 
-# @component CalcApp:Web:Server:Login (#login)
-# @connects #guest to #login with HTTP-GET
-# @threat BruteForceAttack (#bf)
+#@component CalcApp:Web:Server:Index:Login (#login)
+#@connects #index to #login with HTTP-GET
+#@threat BruteForceAttack (#bruteforceattack)
+#@exposes #login to a #bruteforceattack with NOT using account lock out policies
+#@threat SQL Injection (#sqli)
+#@exposes #login to #sqli with NOT validating user inputs
+
 @flaskapp.route('/login')
 def login_page():
     return render_template('login.html')
@@ -81,14 +87,20 @@ def create_token(username, password):
     token = jwt.encode({'user_id': 123154, 'username': username, 'exp': validity}, SECRET_KEY, "HS256")
     return token
 
-# @component CalcApp:Web:Server:Logout (#logout)
-# @connects #guest to #logout with HTTP-GET
+# @component CalcApp:Web:Server:Index:Login:Logout (#logout)
+# @connects #login to #logout with HTTP-GET
+# @connects #logout to #index with HTTPs
+
 @flaskapp.route('/logout')
 def logout_page():
     resp=make_response(redirect('/'))
     resp.delete_cookie('token')
     return resp
 
+# @component CalcApp:Web:Server:Index:Login:UserDatabase (#udb)
+# @connects #login to #udb with HTTP-POST
+#@threat SQL Injection (#sqli)
+#@exposes #udb to #sqli with NOT validating user inputs
 
 @flaskapp.route('/authenticate', methods = ['POST'])
 def authenticate_users():
@@ -128,8 +140,10 @@ def authenticate_users():
     return resp
 
 
-# @component CalcApp:Web:Server:Calculator (#calculator)
-# @connects #guest to #calculator with HTTP-GET
+# @component CalcApp:Web:Server:Index:Login:Calculator (#calculator)
+# @connects #login to #calculator with HTTP-GET
+# @threat Cross-Site-Scripting (XSS)(#xss)
+# @exposes #calculator to #xss with NOT sanitizing user inputs
 @flaskapp.route('/calculator', methods = ['GET'])
 def calculator_get():
     isUserLoggedIn = False
@@ -143,8 +157,8 @@ def calculator_get():
         return make_response(redirect("/login"))
 
 
-# @component CalcApp:Web:Server:Calculate (#calculate)
-# @connects #guest to #calculate with HTTP-POST
+# @component CalcApp:Web:Server:Index:Login:Calculator:Calculate (#calculate)
+# @connects #calculator to #calculate with HTTP-POST
 @flaskapp.route('/calculate', methods = ['POST'])
 def calculate_post():
     Number_1 = request.form.get('Number_1', type = int)
@@ -155,8 +169,7 @@ def calculate_post():
 
     return str(result)
 
-# @component CalcApp:Web:Server:Calculate (#calculate)
-# @connects #guest to #calculate with HTTP-POST
+
 @flaskapp.route('/calculate2', methods = ['POST'])
 def calculate_post2():
     Number_1 = request.form.get('Number_1', type = int)

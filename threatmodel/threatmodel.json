@@ -1,6 +1,72 @@
 {
   "mitigations": [],
-  "exposures": [],
+  "exposures": [
+    {
+      "threat": "#xss",
+      "component": "#index",
+      "details": "NOT sanitizing user inputs",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@exposes #index to #xss with NOT sanitizing user inputs",
+        "code": "# @exposes #index to #xss with NOT sanitizing user inputs\n@flaskapp.route('/')\ndef index_page():\n    print(request.cookies)\n    isUserLoggedIn = False\n\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
+        "line": 1
+      }
+    },
+    {
+      "threat": "#a_bruteforceattack",
+      "component": "#login",
+      "details": "NOT using account lock out policies",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@exposes #login to a #bruteforceattack with NOT using account lock out policies",
+        "code": "#@exposes #login to a #bruteforceattack with NOT using account lock out policies\n\n@flaskapp.route('/login')\ndef login_page():\n    return render_template('login.html')\n\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
+        "line": 1
+      }
+    },
+    {
+      "threat": "#sqli",
+      "component": "#login",
+      "details": "NOT validating user inputs",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@exposes #login to #sqli with NOT validating user inputs",
+        "code": "#@exposes #login to #sqli with NOT validating user inputs\n\n@flaskapp.route('/login')\ndef login_page():\n    return render_template('login.html')\n\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
+        "line": 1
+      }
+    },
+    {
+      "threat": "#sqli",
+      "component": "#udb",
+      "details": "NOT validating user inputs",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@exposes #udb to #sqli with NOT validating user inputs",
+        "code": "#@exposes #udb to #sqli with NOT validating user inputs\n\n@flaskapp.route('/authenticate', methods = ['POST'])\ndef authenticate_users():\n    data = request.form\n    username = data['username']\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
+        "line": 1
+      }
+    },
+    {
+      "threat": "#xss",
+      "component": "#calculator",
+      "details": "NOT sanitizing user inputs",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@exposes #calculator to #xss with NOT sanitizing user inputs",
+        "code": "# @exposes #calculator to #xss with NOT sanitizing user inputs\n@flaskapp.route('/calculator', methods = ['GET'])\ndef calculator_get():\n    isUserLoggedIn = False\n\n    if 'token' in request.cookies:\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
+        "line": 1
+      }
+    }
+  ],
   "transfers": [],
   "acceptances": [],
   "connections": [
@@ -19,85 +85,155 @@
       }
     },
     {
-      "source_component": "#guest",
+      "source_component": "#index",
       "destination_component": "#login",
       "direction": "to",
       "details": "HTTP-GET",
       "description": "",
       "custom": {},
       "source": {
-        "annotation": "@connects #guest to #login with HTTP-GET",
-        "code": "# @connects #guest to #login with HTTP-GET\n@flaskapp.route('/login')\ndef login_page():\n    return render_template('login.html')\n\ndef create_token(username, password):\n",
+        "annotation": "@connects #index to #login with HTTP-GET",
+        "code": "#@connects #index to #login with HTTP-GET\n\n@flaskapp.route('/login')\ndef login_page():\n    return render_template('login.html')\n\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
         "line": 1
       }
     },
     {
-      "source_component": "#guest",
+      "source_component": "#login",
       "destination_component": "#logout",
       "direction": "to",
       "details": "HTTP-GET",
       "description": "",
       "custom": {},
       "source": {
-        "annotation": "@connects #guest to #logout with HTTP-GET",
-        "code": "# @connects #guest to #logout with HTTP-GET\n@flaskapp.route('/logout')\ndef logout_page():\n    resp=make_response(redirect('/'))\n    resp.delete_cookie('token')\n    return resp\n",
+        "annotation": "@connects #login to #logout with HTTP-GET",
+        "code": "# @connects #login to #logout with HTTP-GET\n\n@flaskapp.route('/logout')\ndef logout_page():\n    resp=make_response(redirect('/'))\n    resp.delete_cookie('token')\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
         "line": 1
       }
     },
     {
-      "source_component": "#guest",
+      "source_component": "#logout",
+      "destination_component": "#index",
+      "direction": "to",
+      "details": "HTTPs",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@connects #logout to #index with HTTPs",
+        "code": "# @connects #logout to #index with HTTPs\n\n@flaskapp.route('/logout')\ndef logout_page():\n    resp=make_response(redirect('/'))\n    resp.delete_cookie('token')\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
+        "line": 1
+      }
+    },
+    {
+      "source_component": "#login",
+      "destination_component": "#udb",
+      "direction": "to",
+      "details": "HTTP-POST",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@connects #login to #udb with HTTP-POST",
+        "code": "# @connects #login to #udb with HTTP-POST\n\n@flaskapp.route('/authenticate', methods = ['POST'])\ndef authenticate_users():\n    data = request.form\n    username = data['username']\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
+        "line": 1
+      }
+    },
+    {
+      "source_component": "#login",
       "destination_component": "#calculator",
       "direction": "to",
       "details": "HTTP-GET",
       "description": "",
       "custom": {},
       "source": {
-        "annotation": "@connects #guest to #calculator with HTTP-GET",
-        "code": "# @connects #guest to #calculator with HTTP-GET\n@flaskapp.route('/calculator', methods = ['GET'])\ndef calculator_get():\n    isUserLoggedIn = False\n\n    if 'token' in request.cookies:\n",
+        "annotation": "@connects #login to #calculator with HTTP-GET",
+        "code": "# @connects #login to #calculator with HTTP-GET\n@flaskapp.route('/calculator', methods = ['GET'])\ndef calculator_get():\n    isUserLoggedIn = False\n\n    if 'token' in request.cookies:\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
         "line": 1
       }
     },
     {
-      "source_component": "#guest",
+      "source_component": "#calculator",
       "destination_component": "#calculate",
       "direction": "to",
       "details": "HTTP-POST",
       "description": "",
       "custom": {},
       "source": {
-        "annotation": "@connects #guest to #calculate with HTTP-POST",
-        "code": "# @connects #guest to #calculate with HTTP-POST\n@flaskapp.route('/calculate', methods = ['POST'])\ndef calculate_post():\n    Number_1 = request.form.get('Number_1', type = int)\n    Number_2 = request.form.get('Number_2', type = int)\n    Operation = request.form.get('Operation')\n",
+        "annotation": "@connects #calculator to #calculate with HTTP-POST",
+        "code": "# @connects #calculator to #calculate with HTTP-POST\n@flaskapp.route('/calculate', methods = ['POST'])\ndef calculate_post():\n    Number_1 = request.form.get('Number_1', type = int)\n    Number_2 = request.form.get('Number_2', type = int)\n    Operation = request.form.get('Operation')\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
         "line": 1
       }
     },
     {
-      "source_component": "#guest",
-      "destination_component": "#calculate",
+      "source_component": "#sg",
+      "destination_component": "#subnet",
       "direction": "to",
-      "details": "HTTP-POST",
+      "details": "network",
       "description": "",
       "custom": {},
       "source": {
-        "annotation": "@connects #guest to #calculate with HTTP-POST",
-        "code": "# @connects #guest to #calculate with HTTP-POST\n@flaskapp.route('/calculate2', methods = ['POST'])\ndef calculate_post2():\n    Number_1 = request.form.get('Number_1', type = int)\n    Number_2 = request.form.get('Number_2', type = int)\n    Operation = request.form.get('Operation', type = str)\n",
-        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
+        "annotation": "@connects #sg to #subnet with network",
+        "code": "# @connects #sg to #subnet with network\nresource \"aws_subnet\" \"cyber94_jhiguita_calculator_2_subnet_web_tf\" {\n  vpc_id = var.var_aws_vpc_id\n  cidr_block = \"10.7.1.0/24\"\n\n  tags = {\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/web_subnet/main.tf",
         "line": 1
       }
     },
     {
       "source_component": "#vpc",
-      "destination_component": "#subnet",
+      "destination_component": "#sg",
       "direction": "to",
       "details": "Network",
       "description": "",
       "custom": {},
       "source": {
-        "annotation": "@connects #vpc to #subnet with Network",
-        "code": "# @connects #vpc to #subnet with Network\nresource \"aws_instance\" \"cyber94_jhiguita_calculator_2_webserver_tf\" {\n    ami = var.var_aws_ami_ubuntu_1804\n    instance_type = \"t2.micro\"\n    subnet_id = var.var_web_subnet_id\n    count = 2\n",
+        "annotation": "@connects #vpc to #sg with Network",
+        "code": "# @connects #vpc to #sg with Network\nresource \"aws_security_group\" \"cyber94_jhiguita_calculator_2_webserver_sg_tf\" {\n  name = \"cyber94_jhiguita_calculator_2_webserver_sg\"\n\n  vpc_id = var.var_aws_vpc_id\n\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf",
+        "line": 1
+      }
+    },
+    {
+      "source_component": "#subnet",
+      "destination_component": "#app",
+      "direction": "to",
+      "details": "Network",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@connects #subnet to #app with Network",
+        "code": "# @connects #subnet to #app with Network\n\nresource \"aws_instance\" \"cyber94_jhiguita_calculator_2_webserver_tf\" {\n    ami = var.var_aws_ami_ubuntu_1804\n    instance_type = \"t2.micro\"\n    subnet_id = var.var_web_subnet_id\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf",
+        "line": 1
+      }
+    },
+    {
+      "source_component": "#subnet",
+      "destination_component": "#db",
+      "direction": "to",
+      "details": "Network",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@connects #subnet to #db with Network",
+        "code": "# @connects #subnet to #db with Network\n\nresource \"aws_instance\" \"cyber94_jhiguita_calculator_2_webserver_tf\" {\n    ami = var.var_aws_ami_ubuntu_1804\n    instance_type = \"t2.micro\"\n    subnet_id = var.var_web_subnet_id\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf",
+        "line": 1
+      }
+    },
+    {
+      "source_component": "#app",
+      "destination_component": "#calc",
+      "direction": "to",
+      "details": "Network",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@connects #app to #calc with Network",
+        "code": "# @connects #app to #calc with Network\n\nresource \"aws_instance\" \"cyber94_jhiguita_calculator_2_webserver_tf\" {\n    ami = var.var_aws_ami_ubuntu_1804\n    instance_type = \"t2.micro\"\n    subnet_id = var.var_web_subnet_id\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf",
         "line": 1
       }
@@ -105,5 +241,5 @@
   ],
   "reviews": [],
   "tests": [],
-  "run_id": "1447a1900bbf4116ac0c674ceba11f8b"
+  "run_id": "b3153db90d394ae0b41f06237ca4a846"
 }
