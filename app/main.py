@@ -11,6 +11,9 @@ flaskapp = Flask(__name__)
 SECRET_KEY = "3D238B65CF6D68E4B6797BBEF4EC3"
 
 
+# @component External:Guest (#guest)
+
+
 # Start an app route
 
 def newuser(username, password):
@@ -45,9 +48,8 @@ def verify_token(token):
     else:
         return False
 
-
-
-
+# @component CalcApp:Web:Server:Index (#index)
+# @connects #guest to #index with HTTP-GET
 @flaskapp.route('/')
 def index_page():
     print(request.cookies)
@@ -66,6 +68,9 @@ def index_page():
         resp.set_cookie('user_id', str(user_id))
         return resp
 
+# @component CalcApp:Web:Server:Login (#login)
+# @connects #guest to #login with HTTP-GET
+# @threat BruteForceAttack (#bf)
 @flaskapp.route('/login')
 def login_page():
     return render_template('login.html')
@@ -76,6 +81,8 @@ def create_token(username, password):
     token = jwt.encode({'user_id': 123154, 'username': username, 'exp': validity}, SECRET_KEY, "HS256")
     return token
 
+# @component CalcApp:Web:Server:Logout (#logout)
+# @connects #guest to #logout with HTTP-GET
 @flaskapp.route('/logout')
 def logout_page():
     resp=make_response(redirect('/'))
@@ -120,6 +127,9 @@ def authenticate_users():
     resp.set_cookie('token', db_token)
     return resp
 
+
+# @component CalcApp:Web:Server:Calculator (#calculator)
+# @connects #guest to #calculator with HTTP-GET
 @flaskapp.route('/calculator', methods = ['GET'])
 def calculator_get():
     isUserLoggedIn = False
@@ -133,7 +143,8 @@ def calculator_get():
         return make_response(redirect("/login"))
 
 
-
+# @component CalcApp:Web:Server:Calculate (#calculate)
+# @connects #guest to #calculate with HTTP-POST
 @flaskapp.route('/calculate', methods = ['POST'])
 def calculate_post():
     Number_1 = request.form.get('Number_1', type = int)
@@ -144,6 +155,8 @@ def calculate_post():
 
     return str(result)
 
+# @component CalcApp:Web:Server:Calculate (#calculate)
+# @connects #guest to #calculate with HTTP-POST
 @flaskapp.route('/calculate2', methods = ['POST'])
 def calculate_post2():
     Number_1 = request.form.get('Number_1', type = int)
