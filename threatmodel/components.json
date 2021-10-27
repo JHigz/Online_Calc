@@ -1,0 +1,129 @@
+{
+  "components": {
+    "#guest": {
+      "id": "#guest",
+      "run_id": "1447a1900bbf4116ac0c674ceba11f8b",
+      "name": "External:Guest",
+      "description": "",
+      "paths": [
+        [
+          "External"
+        ],
+        []
+      ],
+      "custom": {}
+    },
+    "#index": {
+      "id": "#index",
+      "run_id": "1447a1900bbf4116ac0c674ceba11f8b",
+      "name": "CalcApp:Web:Server:Index",
+      "description": "",
+      "paths": [
+        [
+          "CalcApp",
+          "Web",
+          "Server"
+        ],
+        []
+      ],
+      "custom": {}
+    },
+    "#login": {
+      "id": "#login",
+      "run_id": "1447a1900bbf4116ac0c674ceba11f8b",
+      "name": "CalcApp:Web:Server:Login",
+      "description": "",
+      "paths": [
+        [
+          "CalcApp",
+          "Web",
+          "Server"
+        ],
+        []
+      ],
+      "custom": {}
+    },
+    "#logout": {
+      "id": "#logout",
+      "run_id": "1447a1900bbf4116ac0c674ceba11f8b",
+      "name": "CalcApp:Web:Server:Logout",
+      "description": "",
+      "paths": [
+        [
+          "CalcApp",
+          "Web",
+          "Server"
+        ],
+        []
+      ],
+      "custom": {}
+    },
+    "#calculator": {
+      "id": "#calculator",
+      "run_id": "1447a1900bbf4116ac0c674ceba11f8b",
+      "name": "CalcApp:Web:Server:Calculator",
+      "description": "",
+      "paths": [
+        [
+          "CalcApp",
+          "Web",
+          "Server"
+        ],
+        []
+      ],
+      "custom": {}
+    },
+    "#calculate": {
+      "id": "#calculate",
+      "run_id": "1447a1900bbf4116ac0c674ceba11f8b",
+      "name": "CalcApp:Web:Server:Calculate",
+      "description": "",
+      "paths": [
+        [
+          "CalcApp",
+          "Web",
+          "Server"
+        ],
+        []
+      ],
+      "custom": {}
+    },
+    "#vpc": {
+      "id": "#vpc",
+      "run_id": "1447a1900bbf4116ac0c674ceba11f8b",
+      "name": "CalcApp:VPC",
+      "description": "",
+      "paths": [
+        [
+          "CalcApp"
+        ],
+        []
+      ],
+      "custom": {}
+    },
+    "#subnet": {
+      "id": "#subnet",
+      "run_id": "1447a1900bbf4116ac0c674ceba11f8b",
+      "name": "CalcApp:VPC:WebServer",
+      "description": "",
+      "paths": [
+        [
+          "CalcApp",
+          "VPC"
+        ],
+        []
+      ],
+      "custom": {}
+    },
+    "#dev": {
+      "id": "#dev",
+      "run_id": "1447a1900bbf4116ac0c674ceba11f8b",
+      "name": "",
+      "description": "",
+      "paths": [
+        []
+      ],
+      "custom": {}
+    }
+  }
+}

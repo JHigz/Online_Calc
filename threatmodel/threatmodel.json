@@ -1,0 +1,109 @@
+{
+  "mitigations": [],
+  "exposures": [],
+  "transfers": [],
+  "acceptances": [],
+  "connections": [
+    {
+      "source_component": "#guest",
+      "destination_component": "#index",
+      "direction": "to",
+      "details": "HTTP-GET",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@connects #guest to #index with HTTP-GET",
+        "code": "# @connects #guest to #index with HTTP-GET\n@flaskapp.route('/')\ndef index_page():\n    print(request.cookies)\n    isUserLoggedIn = False\n\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
+        "line": 1
+      }
+    },
+    {
+      "source_component": "#guest",
+      "destination_component": "#login",
+      "direction": "to",
+      "details": "HTTP-GET",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@connects #guest to #login with HTTP-GET",
+        "code": "# @connects #guest to #login with HTTP-GET\n@flaskapp.route('/login')\ndef login_page():\n    return render_template('login.html')\n\ndef create_token(username, password):\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
+        "line": 1
+      }
+    },
+    {
+      "source_component": "#guest",
+      "destination_component": "#logout",
+      "direction": "to",
+      "details": "HTTP-GET",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@connects #guest to #logout with HTTP-GET",
+        "code": "# @connects #guest to #logout with HTTP-GET\n@flaskapp.route('/logout')\ndef logout_page():\n    resp=make_response(redirect('/'))\n    resp.delete_cookie('token')\n    return resp\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
+        "line": 1
+      }
+    },
+    {
+      "source_component": "#guest",
+      "destination_component": "#calculator",
+      "direction": "to",
+      "details": "HTTP-GET",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@connects #guest to #calculator with HTTP-GET",
+        "code": "# @connects #guest to #calculator with HTTP-GET\n@flaskapp.route('/calculator', methods = ['GET'])\ndef calculator_get():\n    isUserLoggedIn = False\n\n    if 'token' in request.cookies:\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
+        "line": 1
+      }
+    },
+    {
+      "source_component": "#guest",
+      "destination_component": "#calculate",
+      "direction": "to",
+      "details": "HTTP-POST",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@connects #guest to #calculate with HTTP-POST",
+        "code": "# @connects #guest to #calculate with HTTP-POST\n@flaskapp.route('/calculate', methods = ['POST'])\ndef calculate_post():\n    Number_1 = request.form.get('Number_1', type = int)\n    Number_2 = request.form.get('Number_2', type = int)\n    Operation = request.form.get('Operation')\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
+        "line": 1
+      }
+    },
+    {
+      "source_component": "#guest",
+      "destination_component": "#calculate",
+      "direction": "to",
+      "details": "HTTP-POST",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@connects #guest to #calculate with HTTP-POST",
+        "code": "# @connects #guest to #calculate with HTTP-POST\n@flaskapp.route('/calculate2', methods = ['POST'])\ndef calculate_post2():\n    Number_1 = request.form.get('Number_1', type = int)\n    Number_2 = request.form.get('Number_2', type = int)\n    Operation = request.form.get('Operation', type = str)\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
+        "line": 1
+      }
+    },
+    {
+      "source_component": "#vpc",
+      "destination_component": "#subnet",
+      "direction": "to",
+      "details": "Network",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@connects #vpc to #subnet with Network",
+        "code": "# @connects #vpc to #subnet with Network\nresource \"aws_instance\" \"cyber94_jhiguita_calculator_2_webserver_tf\" {\n    ami = var.var_aws_ami_ubuntu_1804\n    instance_type = \"t2.micro\"\n    subnet_id = var.var_web_subnet_id\n    count = 2\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf",
+        "line": 1
+      }
+    }
+  ],
+  "reviews": [],
+  "tests": [],
+  "run_id": "1447a1900bbf4116ac0c674ceba11f8b"
+}

@@ -1,0 +1,11 @@
+{
+  "threats": {
+    "#bf": {
+      "id": "#bf",
+      "run_id": "1447a1900bbf4116ac0c674ceba11f8b",
+      "name": "BruteForceAttack",
+      "description": "",
+      "custom": {}
+    }
+  }
+}
