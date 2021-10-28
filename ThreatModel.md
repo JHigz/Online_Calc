@@ -28,7 +28,7 @@ def index_page():
 Not using account lock out policies
 
 ```
-#@exposes #login to a #bruteforceattack with NOT using account lock out policies
+# @exposes #login to a #bruteforceattack with NOT using account lock out policies
 
 @flaskapp.route('/login')
 def login_page():
@@ -42,7 +42,7 @@ def login_page():
 Not validating user inputs
 
 ```
-#@exposes #login to #sqli with NOT validating user inputs
+# @exposes #login to #sqli with NOT validating user inputs
 
 @flaskapp.route('/login')
 def login_page():
@@ -56,7 +56,7 @@ def login_page():
 Not validating user inputs
 
 ```
-#@exposes #udb to #sqli with NOT validating user inputs
+# @exposes #udb to #sqli with NOT validating user inputs
 
 @flaskapp.route('/authenticate', methods = ['POST'])
 def authenticate_users():
@@ -80,6 +80,34 @@ def calculator_get():
 ```
 /home/kali/cyber/projects/Online_Calc/app/main.py:1
 
+## Unauthorised access against CalcApp:AWS_VPC:SecurityGroup:Subnet
+Not defining traffic allowed into the vpc
+
+```
+# @exposes #subnet to #uaccess with NOT defining traffic allowed into the vpc
+
+resource "aws_security_group" "cyber94_jhiguita_calculator_2_webserver_sg_tf" {
+  name = "cyber94_jhiguita_calculator_2_webserver_sg"
+
+  vpc_id = var.var_aws_vpc_id
+
+```
+/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf:1
+
+## Unauthorised access against CalcApp:AWS_VPC:SecurityGroup:Subnet:AppServer
+Aws keys not being properly secured or managed
+
+```
+# @exposes #app to #uaccess with AWS keys not being properly secured or managed
+
+
+resource "aws_instance" "cyber94_jhiguita_calculator_2_webserver_tf" {
+    ami = var.var_aws_ami_ubuntu_1804
+    instance_type = "t2.micro"
+
+```
+/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf:1
+
 
 # Acceptances
 
@@ -89,11 +117,53 @@ def calculator_get():
 
 # Mitigations
 
+## Unauthorised access against CalcApp:AWS_VPC:SecurityGroup:Subnet mitigated by Ingress egress lists
+
+
+```
+# @mitigates #subnet against #uaccess with #ingressegress
+
+resource "aws_security_group" "cyber94_jhiguita_calculator_2_webserver_sg_tf" {
+  name = "cyber94_jhiguita_calculator_2_webserver_sg"
+
+  vpc_id = var.var_aws_vpc_id
+
+```
+/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf:1
+
+## Unauthorised access against CalcApp:AWS_VPC:SecurityGroup:Subnet:AppServer mitigated by Aws vault
+
+
+```
+# @mitigates #app against #uaccess with #vault
+
+
+resource "aws_instance" "cyber94_jhiguita_calculator_2_webserver_tf" {
+    ami = var.var_aws_ami_ubuntu_1804
+    instance_type = "t2.micro"
+
+```
+/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf:1
+
 
 # Reviews
 
 
 # Connections
+
+## User:User To CalcApp:Web:Server:Index
+HTTP-GET
+
+```
+# @connects #user to #index with HTTP-GET
+@flaskapp.route('/')
+def index_page():
+    print(request.cookies)
+    isUserLoggedIn = False
+
+
+```
+/home/kali/cyber/projects/Online_Calc/app/main.py:1
 
 ## External:Guest To CalcApp:Web:Server:Index
 HTTP-GET
@@ -109,11 +179,11 @@ def index_page():
 ```
 /home/kali/cyber/projects/Online_Calc/app/main.py:1
 
-## CalcApp:Web:Server:Index To CalcApp:Web:Server:Index:Login
+## User:User To CalcApp:Web:Server:Index:Login
 HTTP-GET
 
 ```
-#@connects #index to #login with HTTP-GET
+# @connects #user to #login with HTTP-GET
 
 @flaskapp.route('/login')
 def login_page():
@@ -123,11 +193,25 @@ def login_page():
 ```
 /home/kali/cyber/projects/Online_Calc/app/main.py:1
 
-## CalcApp:Web:Server:Index:Login To CalcApp:Web:Server:Index:Login:Logout
+## External:Guest To CalcApp:Web:Server:Index:Login
 HTTP-GET
 
 ```
-# @connects #login to #logout with HTTP-GET
+# @connects #guest to #login with HTTP-GET
+
+@flaskapp.route('/login')
+def login_page():
+    return render_template('login.html')
+
+
+```
+/home/kali/cyber/projects/Online_Calc/app/main.py:1
+
+## User:User To CalcApp:Web:Server:Index:Login:Logout
+HTTP-GET
+
+```
+# @connects #user to #logout with HTTP-GET
 
 @flaskapp.route('/logout')
 def logout_page():
@@ -137,25 +221,11 @@ def logout_page():
 ```
 /home/kali/cyber/projects/Online_Calc/app/main.py:1
 
-## CalcApp:Web:Server:Index:Login:Logout To CalcApp:Web:Server:Index
-HTTPs
-
-```
-# @connects #logout to #index with HTTPs
-
-@flaskapp.route('/logout')
-def logout_page():
-    resp=make_response(redirect('/'))
-    resp.delete_cookie('token')
-
-```
-/home/kali/cyber/projects/Online_Calc/app/main.py:1
-
-## CalcApp:Web:Server:Index:Login To CalcApp:Web:Server:Index:Login:UserDatabase
+## User:User To CalcApp:Web:Server:Index:Login:UserDatabase
 HTTP-POST
 
 ```
-# @connects #login to #udb with HTTP-POST
+# @connects #user to #udb with HTTP-POST
 
 @flaskapp.route('/authenticate', methods = ['POST'])
 def authenticate_users():
@@ -165,11 +235,11 @@ def authenticate_users():
 ```
 /home/kali/cyber/projects/Online_Calc/app/main.py:1
 
-## CalcApp:Web:Server:Index:Login To CalcApp:Web:Server:Index:Login:Calculator
+## User:User To CalcApp:Web:Server:Index:Login:Calculator
 HTTP-GET
 
 ```
-# @connects #login to #calculator with HTTP-GET
+# @connects #user to #calculator with HTTP-GET
 @flaskapp.route('/calculator', methods = ['GET'])
 def calculator_get():
     isUserLoggedIn = False
@@ -179,11 +249,11 @@ def calculator_get():
 ```
 /home/kali/cyber/projects/Online_Calc/app/main.py:1
 
-## CalcApp:Web:Server:Index:Login:Calculator To CalcApp:Web:Server:Index:Login:Calculator:Calculate
+## User:User To CalcApp:Web:Server:Index:Login:Calculator:Calculate
 HTTP-POST
 
 ```
-# @connects #calculator to #calculate with HTTP-POST
+# @connects #user to #calculate with HTTP-POST
 @flaskapp.route('/calculate', methods = ['POST'])
 def calculate_post():
     Number_1 = request.form.get('Number_1', type = int)
@@ -212,11 +282,11 @@ Network
 
 ```
 # @connects #vpc to #sg with Network
+
 resource "aws_security_group" "cyber94_jhiguita_calculator_2_webserver_sg_tf" {
   name = "cyber94_jhiguita_calculator_2_webserver_sg"
 
   vpc_id = var.var_aws_vpc_id
-
 
 ```
 /home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf:1
@@ -227,10 +297,10 @@ Network
 ```
 # @connects #subnet to #app with Network
 
+
 resource "aws_instance" "cyber94_jhiguita_calculator_2_webserver_tf" {
     ami = var.var_aws_ami_ubuntu_1804
     instance_type = "t2.micro"
-    subnet_id = var.var_web_subnet_id
 
 ```
 /home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf:1
@@ -241,10 +311,10 @@ Network
 ```
 # @connects #subnet to #db with Network
 
+
 resource "aws_instance" "cyber94_jhiguita_calculator_2_webserver_tf" {
     ami = var.var_aws_ami_ubuntu_1804
     instance_type = "t2.micro"
-    subnet_id = var.var_web_subnet_id
 
 ```
 /home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf:1
@@ -255,16 +325,20 @@ Network
 ```
 # @connects #app to #calc with Network
 
+
 resource "aws_instance" "cyber94_jhiguita_calculator_2_webserver_tf" {
     ami = var.var_aws_ami_ubuntu_1804
     instance_type = "t2.micro"
-    subnet_id = var.var_web_subnet_id
 
 ```
 /home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf:1
 
 
 # Components
+
+## CalcApp:AWS_VPC:SecurityGroup:Subnet
+
+## CalcApp:AWS_VPC:SecurityGroup:Subnet:AppServer
 
 ## CalcApp:Web:Server:Index
 
@@ -274,6 +348,8 @@ resource "aws_instance" "cyber94_jhiguita_calculator_2_webserver_tf" {
 
 ## CalcApp:Web:Server:Index:Login:Calculator
 
+## User:User
+
 ## External:Guest
 
 ## CalcApp:Web:Server:Index:Login:Logout
@@ -282,11 +358,7 @@ resource "aws_instance" "cyber94_jhiguita_calculator_2_webserver_tf" {
 
 ## CalcApp:AWS_VPC:SecurityGroup
 
-## CalcApp:AWS_VPC:SecurityGroup:Subnet
-
 ## CalcApp:AWS_VPC
-
-## CalcApp:AWS_VPC:SecurityGroup:Subnet:AppServer
 
 ## CalcApp:AWS_VPC:SecurityGroup:Subnet:DBServer
 
@@ -294,6 +366,9 @@ resource "aws_instance" "cyber94_jhiguita_calculator_2_webserver_tf" {
 
 
 # Threats
+
+## Unauthorised access
+
 
 ## Cross-site-scripting
 
@@ -306,3 +381,7 @@ resource "aws_instance" "cyber94_jhiguita_calculator_2_webserver_tf" {
 
 
 # Controls
+
+## Ingress egress lists
+
+## Aws vault

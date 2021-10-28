@@ -1,5 +1,32 @@
 {
-  "mitigations": [],
+  "mitigations": [
+    {
+      "control": "#ingressegress",
+      "threat": "#uaccess",
+      "component": "#subnet",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@mitigates #subnet against #uaccess with #ingressegress",
+        "code": "# @mitigates #subnet against #uaccess with #ingressegress\n\nresource \"aws_security_group\" \"cyber94_jhiguita_calculator_2_webserver_sg_tf\" {\n  name = \"cyber94_jhiguita_calculator_2_webserver_sg\"\n\n  vpc_id = var.var_aws_vpc_id\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf",
+        "line": 1
+      }
+    },
+    {
+      "control": "#vault",
+      "threat": "#uaccess",
+      "component": "#app",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@mitigates #app against #uaccess with #vault",
+        "code": "# @mitigates #app against #uaccess with #vault\n\n\nresource \"aws_instance\" \"cyber94_jhiguita_calculator_2_webserver_tf\" {\n    ami = var.var_aws_ami_ubuntu_1804\n    instance_type = \"t2.micro\"\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf",
+        "line": 1
+      }
+    }
+  ],
   "exposures": [
     {
       "threat": "#xss",
@@ -22,7 +49,7 @@
       "custom": {},
       "source": {
         "annotation": "@exposes #login to a #bruteforceattack with NOT using account lock out policies",
-        "code": "#@exposes #login to a #bruteforceattack with NOT using account lock out policies\n\n@flaskapp.route('/login')\ndef login_page():\n    return render_template('login.html')\n\n",
+        "code": "# @exposes #login to a #bruteforceattack with NOT using account lock out policies\n\n@flaskapp.route('/login')\ndef login_page():\n    return render_template('login.html')\n\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
         "line": 1
       }
@@ -35,7 +62,7 @@
       "custom": {},
       "source": {
         "annotation": "@exposes #login to #sqli with NOT validating user inputs",
-        "code": "#@exposes #login to #sqli with NOT validating user inputs\n\n@flaskapp.route('/login')\ndef login_page():\n    return render_template('login.html')\n\n",
+        "code": "# @exposes #login to #sqli with NOT validating user inputs\n\n@flaskapp.route('/login')\ndef login_page():\n    return render_template('login.html')\n\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
         "line": 1
       }
@@ -48,7 +75,7 @@
       "custom": {},
       "source": {
         "annotation": "@exposes #udb to #sqli with NOT validating user inputs",
-        "code": "#@exposes #udb to #sqli with NOT validating user inputs\n\n@flaskapp.route('/authenticate', methods = ['POST'])\ndef authenticate_users():\n    data = request.form\n    username = data['username']\n",
+        "code": "# @exposes #udb to #sqli with NOT validating user inputs\n\n@flaskapp.route('/authenticate', methods = ['POST'])\ndef authenticate_users():\n    data = request.form\n    username = data['username']\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
         "line": 1
       }
@@ -65,11 +92,51 @@
         "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
         "line": 1
       }
+    },
+    {
+      "threat": "#uaccess",
+      "component": "#subnet",
+      "details": "NOT defining traffic allowed into the vpc",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@exposes #subnet to #uaccess with NOT defining traffic allowed into the vpc",
+        "code": "# @exposes #subnet to #uaccess with NOT defining traffic allowed into the vpc\n\nresource \"aws_security_group\" \"cyber94_jhiguita_calculator_2_webserver_sg_tf\" {\n  name = \"cyber94_jhiguita_calculator_2_webserver_sg\"\n\n  vpc_id = var.var_aws_vpc_id\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf",
+        "line": 1
+      }
+    },
+    {
+      "threat": "#uaccess",
+      "component": "#app",
+      "details": "AWS keys not being properly secured or managed",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@exposes #app to #uaccess with AWS keys not being properly secured or managed",
+        "code": "# @exposes #app to #uaccess with AWS keys not being properly secured or managed\n\n\nresource \"aws_instance\" \"cyber94_jhiguita_calculator_2_webserver_tf\" {\n    ami = var.var_aws_ami_ubuntu_1804\n    instance_type = \"t2.micro\"\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf",
+        "line": 1
+      }
     }
   ],
   "transfers": [],
   "acceptances": [],
   "connections": [
+    {
+      "source_component": "#user",
+      "destination_component": "#index",
+      "direction": "to",
+      "details": "HTTP-GET",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@connects #user to #index with HTTP-GET",
+        "code": "# @connects #user to #index with HTTP-GET\n@flaskapp.route('/')\ndef index_page():\n    print(request.cookies)\n    isUserLoggedIn = False\n\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
+        "line": 1
+      }
+    },
     {
       "source_component": "#guest",
       "destination_component": "#index",
@@ -85,85 +152,85 @@
       }
     },
     {
-      "source_component": "#index",
+      "source_component": "#user",
       "destination_component": "#login",
       "direction": "to",
       "details": "HTTP-GET",
       "description": "",
       "custom": {},
       "source": {
-        "annotation": "@connects #index to #login with HTTP-GET",
-        "code": "#@connects #index to #login with HTTP-GET\n\n@flaskapp.route('/login')\ndef login_page():\n    return render_template('login.html')\n\n",
+        "annotation": "@connects #user to #login with HTTP-GET",
+        "code": "# @connects #user to #login with HTTP-GET\n\n@flaskapp.route('/login')\ndef login_page():\n    return render_template('login.html')\n\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
         "line": 1
       }
     },
     {
-      "source_component": "#login",
+      "source_component": "#guest",
+      "destination_component": "#login",
+      "direction": "to",
+      "details": "HTTP-GET",
+      "description": "",
+      "custom": {},
+      "source": {
+        "annotation": "@connects #guest to #login with HTTP-GET",
+        "code": "# @connects #guest to #login with HTTP-GET\n\n@flaskapp.route('/login')\ndef login_page():\n    return render_template('login.html')\n\n",
+        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
+        "line": 1
+      }
+    },
+    {
+      "source_component": "#user",
       "destination_component": "#logout",
       "direction": "to",
       "details": "HTTP-GET",
       "description": "",
       "custom": {},
       "source": {
-        "annotation": "@connects #login to #logout with HTTP-GET",
-        "code": "# @connects #login to #logout with HTTP-GET\n\n@flaskapp.route('/logout')\ndef logout_page():\n    resp=make_response(redirect('/'))\n    resp.delete_cookie('token')\n",
+        "annotation": "@connects #user to #logout with HTTP-GET",
+        "code": "# @connects #user to #logout with HTTP-GET\n\n@flaskapp.route('/logout')\ndef logout_page():\n    resp=make_response(redirect('/'))\n    resp.delete_cookie('token')\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
         "line": 1
       }
     },
     {
-      "source_component": "#logout",
-      "destination_component": "#index",
-      "direction": "to",
-      "details": "HTTPs",
-      "description": "",
-      "custom": {},
-      "source": {
-        "annotation": "@connects #logout to #index with HTTPs",
-        "code": "# @connects #logout to #index with HTTPs\n\n@flaskapp.route('/logout')\ndef logout_page():\n    resp=make_response(redirect('/'))\n    resp.delete_cookie('token')\n",
-        "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
-        "line": 1
-      }
-    },
-    {
-      "source_component": "#login",
+      "source_component": "#user",
       "destination_component": "#udb",
       "direction": "to",
       "details": "HTTP-POST",
       "description": "",
       "custom": {},
       "source": {
-        "annotation": "@connects #login to #udb with HTTP-POST",
-        "code": "# @connects #login to #udb with HTTP-POST\n\n@flaskapp.route('/authenticate', methods = ['POST'])\ndef authenticate_users():\n    data = request.form\n    username = data['username']\n",
+        "annotation": "@connects #user to #udb with HTTP-POST",
+        "code": "# @connects #user to #udb with HTTP-POST\n\n@flaskapp.route('/authenticate', methods = ['POST'])\ndef authenticate_users():\n    data = request.form\n    username = data['username']\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
         "line": 1
       }
     },
     {
-      "source_component": "#login",
+      "source_component": "#user",
       "destination_component": "#calculator",
       "direction": "to",
       "details": "HTTP-GET",
       "description": "",
       "custom": {},
       "source": {
-        "annotation": "@connects #login to #calculator with HTTP-GET",
-        "code": "# @connects #login to #calculator with HTTP-GET\n@flaskapp.route('/calculator', methods = ['GET'])\ndef calculator_get():\n    isUserLoggedIn = False\n\n    if 'token' in request.cookies:\n",
+        "annotation": "@connects #user to #calculator with HTTP-GET",
+        "code": "# @connects #user to #calculator with HTTP-GET\n@flaskapp.route('/calculator', methods = ['GET'])\ndef calculator_get():\n    isUserLoggedIn = False\n\n    if 'token' in request.cookies:\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
         "line": 1
       }
     },
     {
-      "source_component": "#calculator",
+      "source_component": "#user",
       "destination_component": "#calculate",
       "direction": "to",
       "details": "HTTP-POST",
       "description": "",
       "custom": {},
       "source": {
-        "annotation": "@connects #calculator to #calculate with HTTP-POST",
-        "code": "# @connects #calculator to #calculate with HTTP-POST\n@flaskapp.route('/calculate', methods = ['POST'])\ndef calculate_post():\n    Number_1 = request.form.get('Number_1', type = int)\n    Number_2 = request.form.get('Number_2', type = int)\n    Operation = request.form.get('Operation')\n",
+        "annotation": "@connects #user to #calculate with HTTP-POST",
+        "code": "# @connects #user to #calculate with HTTP-POST\n@flaskapp.route('/calculate', methods = ['POST'])\ndef calculate_post():\n    Number_1 = request.form.get('Number_1', type = int)\n    Number_2 = request.form.get('Number_2', type = int)\n    Operation = request.form.get('Operation')\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/app/main.py",
         "line": 1
       }
@@ -191,7 +258,7 @@
       "custom": {},
       "source": {
         "annotation": "@connects #vpc to #sg with Network",
-        "code": "# @connects #vpc to #sg with Network\nresource \"aws_security_group\" \"cyber94_jhiguita_calculator_2_webserver_sg_tf\" {\n  name = \"cyber94_jhiguita_calculator_2_webserver_sg\"\n\n  vpc_id = var.var_aws_vpc_id\n\n",
+        "code": "# @connects #vpc to #sg with Network\n\nresource \"aws_security_group\" \"cyber94_jhiguita_calculator_2_webserver_sg_tf\" {\n  name = \"cyber94_jhiguita_calculator_2_webserver_sg\"\n\n  vpc_id = var.var_aws_vpc_id\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf",
         "line": 1
       }
@@ -205,7 +272,7 @@
       "custom": {},
       "source": {
         "annotation": "@connects #subnet to #app with Network",
-        "code": "# @connects #subnet to #app with Network\n\nresource \"aws_instance\" \"cyber94_jhiguita_calculator_2_webserver_tf\" {\n    ami = var.var_aws_ami_ubuntu_1804\n    instance_type = \"t2.micro\"\n    subnet_id = var.var_web_subnet_id\n",
+        "code": "# @connects #subnet to #app with Network\n\n\nresource \"aws_instance\" \"cyber94_jhiguita_calculator_2_webserver_tf\" {\n    ami = var.var_aws_ami_ubuntu_1804\n    instance_type = \"t2.micro\"\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf",
         "line": 1
       }
@@ -219,7 +286,7 @@
       "custom": {},
       "source": {
         "annotation": "@connects #subnet to #db with Network",
-        "code": "# @connects #subnet to #db with Network\n\nresource \"aws_instance\" \"cyber94_jhiguita_calculator_2_webserver_tf\" {\n    ami = var.var_aws_ami_ubuntu_1804\n    instance_type = \"t2.micro\"\n    subnet_id = var.var_web_subnet_id\n",
+        "code": "# @connects #subnet to #db with Network\n\n\nresource \"aws_instance\" \"cyber94_jhiguita_calculator_2_webserver_tf\" {\n    ami = var.var_aws_ami_ubuntu_1804\n    instance_type = \"t2.micro\"\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf",
         "line": 1
       }
@@ -233,7 +300,7 @@
       "custom": {},
       "source": {
         "annotation": "@connects #app to #calc with Network",
-        "code": "# @connects #app to #calc with Network\n\nresource \"aws_instance\" \"cyber94_jhiguita_calculator_2_webserver_tf\" {\n    ami = var.var_aws_ami_ubuntu_1804\n    instance_type = \"t2.micro\"\n    subnet_id = var.var_web_subnet_id\n",
+        "code": "# @connects #app to #calc with Network\n\n\nresource \"aws_instance\" \"cyber94_jhiguita_calculator_2_webserver_tf\" {\n    ami = var.var_aws_ami_ubuntu_1804\n    instance_type = \"t2.micro\"\n",
         "filename": "/home/kali/cyber/projects/Online_Calc/terraform-infra-modular/modules/webserver/main.tf",
         "line": 1
       }
@@ -241,5 +308,5 @@
   ],
   "reviews": [],
   "tests": [],
-  "run_id": "b3153db90d394ae0b41f06237ca4a846"
+  "run_id": "49c46fce821b4b55abfe61943e78cc6c"
 }

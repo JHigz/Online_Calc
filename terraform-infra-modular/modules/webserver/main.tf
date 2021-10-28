@@ -1,5 +1,10 @@
 # @component CalcApp:AWS_VPC:SecurityGroup (#sg)
 # @connects #vpc to #sg with Network
+# @control Ingress Egress Lists (#ingressegress)
+# @exposes #subnet to #uaccess with NOT defining traffic allowed into the vpc
+# @mitigates #subnet against #uaccess with #ingressegress
+
+#by only allowing traffic from given IP's & Ports
 resource "aws_security_group" "cyber94_jhiguita_calculator_2_webserver_sg_tf" {
   name = "cyber94_jhiguita_calculator_2_webserver_sg"
 
@@ -46,6 +51,11 @@ resource "aws_security_group" "cyber94_jhiguita_calculator_2_webserver_sg_tf" {
 # @connects #subnet to #db with Network
 # @component CalcApp:AWS_VPC:SecurityGroup:Subnet:AppServer:CalculatorApp (#calc)
 # @connects #app to #calc with Network
+# @threat Unauthorised Access (#uaccess)
+# @control AWS Vault (#vault)
+# @exposes #app to #uaccess with AWS keys not being properly secured or managed
+# @mitigates #app against #uaccess with #vault
+
 
 resource "aws_instance" "cyber94_jhiguita_calculator_2_webserver_tf" {
     ami = var.var_aws_ami_ubuntu_1804

@@ -1,4 +1,6 @@
 # @component CalcApp:AWS_VPC (#vpc)
+
+
 resource "aws_vpc" "cyber94_jhiguita_calculator_2_vpc_tf" {
     cidr_block = "10.7.0.0/16"
     enable_dns_support = true
